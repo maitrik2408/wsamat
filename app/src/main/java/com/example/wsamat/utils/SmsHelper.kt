@@ -17,7 +17,9 @@ class SmsHelper(private val context: Context) {
     fun sendEmergencySms(
         contacts: List<Contact>,
         customMessage: String,
-        mapUrl: String
+        mapUrl: String,
+        hasPhoto: Boolean = false,
+        hasAudio: Boolean = false
     ): Boolean {
         val now = System.currentTimeMillis()
         if (now - lastSmsDispatchTime < SMS_DEBOUNCE_INTERVAL_MS) {
@@ -34,10 +36,19 @@ class SmsHelper(private val context: Context) {
             context, android.Manifest.permission.SEND_SMS
         ) == PackageManager.PERMISSION_GRANTED
 
-        val fullMessage = if (mapUrl.isNotEmpty()) {
-            "$customMessage\nLocation: $mapUrl"
-        } else {
-            customMessage
+        val evidenceText = buildString {
+            if (hasPhoto && hasAudio) append("\n[Media Evidence: Photo & Audio Recorded]")
+            else if (hasPhoto) append("\n[Media Evidence: Photo Recorded]")
+            else if (hasAudio) append("\n[Media Evidence: Audio Recorded]")
+        }
+
+        val fullMessage = buildString {
+            append(customMessage)
+            if (mapUrl.isNotEmpty()) {
+                append("\nLocation: ")
+                append(mapUrl)
+            }
+            append(evidenceText)
         }
 
         if (!hasSmsPermission) {

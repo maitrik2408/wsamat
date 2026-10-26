@@ -102,7 +102,7 @@ class IncidentHistoryActivity : BaseActivity() {
             if (it is Result.Success) it.data else emptyList()
         }
         val note = "Incident Log: ${incident.eventType} - ${incident.locationText}"
-        whatsAppHelper.sendEmergencyWhatsApp(contacts, note, incident.mapUrl, incident.photoPath)
+        whatsAppHelper.sendEmergencyWhatsApp(contacts, note, incident.mapUrl, incident.photoPath, incident.audioPath)
     }
 
     private fun showClearConfirmDialog() {

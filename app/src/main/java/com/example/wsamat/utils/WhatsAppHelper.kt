@@ -15,7 +15,8 @@ class WhatsAppHelper(private val context: Context) {
         contacts: List<Contact>,
         customMessage: String,
         mapUrl: String,
-        photoPath: String?
+        photoPath: String?,
+        audioPath: String? = null
     ): Boolean {
         val fullMessage = buildString {
             append("🚨 EMERGENCY ALERT! 🚨\n")
@@ -26,32 +27,60 @@ class WhatsAppHelper(private val context: Context) {
             }
         }
 
-        val photoFile = if (!photoPath.isNullOrEmpty()) File(photoPath) else null
-        val photoUri: Uri? = if (photoFile != null && photoFile.exists()) {
-            try {
-                FileProvider.getUriForFile(
-                    context,
-                    "${context.packageName}.fileprovider",
-                    photoFile
-                )
-            } catch (e: Exception) {
-                Log.e("WhatsAppHelper", "Error getting FileProvider URI for photo", e)
-                null
+        val mediaUris = ArrayList<Uri>()
+
+        if (!photoPath.isNullOrEmpty()) {
+            val file = File(photoPath)
+            if (file.exists()) {
+                try {
+                    val uri = FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.fileprovider",
+                        file
+                    )
+                    mediaUris.add(uri)
+                } catch (e: Exception) {
+                    Log.e("WhatsAppHelper", "Error getting FileProvider URI for photo", e)
+                }
             }
-        } else {
-            null
         }
 
-        val intent = Intent(Intent.ACTION_SEND).apply {
-            if (photoUri != null) {
-                type = "image/*"
-                putExtra(Intent.EXTRA_STREAM, photoUri)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            } else {
-                type = "text/plain"
+        if (!audioPath.isNullOrEmpty()) {
+            val file = File(audioPath)
+            if (file.exists()) {
+                try {
+                    val uri = FileProvider.getUriForFile(
+                        context,
+                        "${context.packageName}.fileprovider",
+                        file
+                    )
+                    mediaUris.add(uri)
+                } catch (e: Exception) {
+                    Log.e("WhatsAppHelper", "Error getting FileProvider URI for audio", e)
+                }
             }
-            putExtra(Intent.EXTRA_TEXT, fullMessage)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+
+        val intent = if (mediaUris.size > 1) {
+            Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                type = "*/*"
+                putParcelableArrayListExtra(Intent.EXTRA_STREAM, mediaUris)
+                putExtra(Intent.EXTRA_TEXT, fullMessage)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        } else if (mediaUris.size == 1) {
+            Intent(Intent.ACTION_SEND).apply {
+                type = if (!photoPath.isNullOrEmpty()) "image/*" else "audio/*"
+                putExtra(Intent.EXTRA_STREAM, mediaUris[0])
+                putExtra(Intent.EXTRA_TEXT, fullMessage)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        } else {
+            Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, fullMessage)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
         }
 
         val whatsappInstalled = isPackageInstalled("com.whatsapp") || isPackageInstalled("com.whatsapp.w4b")
@@ -61,7 +90,7 @@ class WhatsAppHelper(private val context: Context) {
             intent.setPackage(packageName)
             try {
                 context.startActivity(intent)
-                Toast.makeText(context, "Opening WhatsApp with Emergency Alert & Photo...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Opening WhatsApp with Emergency Alert & Evidence...", Toast.LENGTH_SHORT).show()
                 return true
             } catch (e: Exception) {
                 Log.e("WhatsAppHelper", "Failed to launch WhatsApp directly", e)
@@ -69,7 +98,7 @@ class WhatsAppHelper(private val context: Context) {
         }
 
         return try {
-            val chooser = Intent.createChooser(intent, "Send Emergency Alert & Photo via").apply {
+            val chooser = Intent.createChooser(intent, "Send Emergency Alert & Evidence via").apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             context.startActivity(chooser)

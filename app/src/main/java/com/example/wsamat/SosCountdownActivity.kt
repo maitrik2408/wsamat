@@ -53,6 +53,7 @@ class SosCountdownActivity : AppCompatActivity() {
     private var isCancelled = false
     private var currentMapUrl: String = ""
     private var currentPhotoPath: String? = null
+    private var currentAudioPath: String? = null
 
     private val requestPermissionsLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -98,7 +99,7 @@ class SosCountdownActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnShareWhatsApp).setOnClickListener {
             val contacts = dbHelper.getAllContacts()
             val customNote = userPrefs.emergencyNote
-            whatsAppHelper.sendEmergencyWhatsApp(contacts, customNote, currentMapUrl, currentPhotoPath)
+            whatsAppHelper.sendEmergencyWhatsApp(contacts, customNote, currentMapUrl, currentPhotoPath, currentAudioPath)
         }
 
         findViewById<Button>(R.id.btnShareLocationText).setOnClickListener {
@@ -200,6 +201,7 @@ class SosCountdownActivity : AppCompatActivity() {
         val contacts = dbHelper.getAllContacts()
 
         val audioPath = audioRecorderHelper.startRecording(20)
+        currentAudioPath = audioPath
 
         cameraHelper.captureSilentPhoto { photoPath ->
             currentPhotoPath = photoPath
@@ -211,7 +213,7 @@ class SosCountdownActivity : AppCompatActivity() {
                 tvResultLocation.text = "Location: $locationText"
 
                 val customNote = userPrefs.emergencyNote
-                val isSent = smsHelper.sendEmergencySms(contacts, customNote, currentMapUrl)
+                val isSent = smsHelper.sendEmergencySms(contacts, customNote, currentMapUrl, photoPath != null, audioPath != null)
 
                 val statusStr = if (isSent) {
                     "Automatically Sent to ${contacts.size} Contact(s)"
