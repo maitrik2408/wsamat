@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.wsamat.data.UserPreferences
 import com.example.wsamat.service.LockScreenSosService
 import com.example.wsamat.ui.anim.ViewAnimationUtils
 import com.example.wsamat.ui.base.BaseActivity
@@ -186,6 +185,14 @@ class ProfileActivity : BaseActivity() {
         ViewAnimationUtils.applyTouchScaleAnimation(btnPrivacy)
         btnPrivacy.setOnClickListener {
             navigateTo(PrivacyPolicyActivity::class.java)
+        }
+
+        val btnLogout = findViewById<MaterialButton>(R.id.btnLogout)
+        ViewAnimationUtils.applyTouchScaleAnimation(btnLogout)
+        btnLogout.setOnClickListener {
+            userPrefs.isLoggedIn = false
+            Toast.makeText(this, "Logged out successfully.", Toast.LENGTH_SHORT).show()
+            navigateTo(AuthActivity::class.java, finishCurrent = true)
         }
 
         rgAppIconDisguise.setOnCheckedChangeListener { _, checkedId ->

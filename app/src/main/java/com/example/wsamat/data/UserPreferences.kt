@@ -10,6 +10,22 @@ class UserPreferences(context: Context) {
         get() = prefs.getBoolean(KEY_IS_FIRST_RUN, true)
         set(value) = prefs.edit().putBoolean(KEY_IS_FIRST_RUN, value).apply()
 
+    var isRegistered: Boolean
+        get() = prefs.getBoolean(KEY_IS_REGISTERED, false)
+        set(value) = prefs.edit().putBoolean(KEY_IS_REGISTERED, value).apply()
+
+    var isLoggedIn: Boolean
+        get() = prefs.getBoolean(KEY_IS_LOGGED_IN, false)
+        set(value) = prefs.edit().putBoolean(KEY_IS_LOGGED_IN, value).apply()
+
+    var userEmail: String
+        get() = prefs.getString(KEY_USER_EMAIL, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_USER_EMAIL, value).apply()
+
+    var userPasswordHash: String
+        get() = prefs.getString(KEY_USER_PASSWORD_HASH, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_USER_PASSWORD_HASH, value).apply()
+
     var themeMode: String
         get() = prefs.getString(KEY_THEME_MODE, "SYSTEM") ?: "SYSTEM"
         set(value) = prefs.edit().putString(KEY_THEME_MODE, value).apply()
@@ -72,6 +88,10 @@ class UserPreferences(context: Context) {
     companion object {
         private const val PREF_NAME = "wsamat_user_prefs"
         private const val KEY_IS_FIRST_RUN = "is_first_run"
+        private const val KEY_IS_REGISTERED = "is_registered"
+        private const val KEY_IS_LOGGED_IN = "is_logged_in"
+        private const val KEY_USER_EMAIL = "user_email"
+        private const val KEY_USER_PASSWORD_HASH = "user_password_hash"
         private const val KEY_THEME_MODE = "theme_mode"
         private const val KEY_APP_ICON_MODE = "app_icon_mode"
         private const val KEY_USER_NAME = "user_name"

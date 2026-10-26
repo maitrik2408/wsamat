@@ -43,6 +43,13 @@
             </intent-filter>
         </activity>
 
+        <!-- Local Authentication Activity (Login / Register) -->
+        <activity
+            android:name=".AuthActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.Wsamat" />
+
         <!-- Main Dashboard Activity -->
         <activity
             android:name=".MainActivity"

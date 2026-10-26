@@ -683,5 +683,20 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Account Logout Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnLogout"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
+            android:text="LOG OUT OF LOCAL ACCOUNT"
+            android:textColor="#DC3545"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="14dp"
+            app:strokeColor="#DC3545"
+            app:strokeWidth="1.5dp" />
+
     </LinearLayout>
 </ScrollView>

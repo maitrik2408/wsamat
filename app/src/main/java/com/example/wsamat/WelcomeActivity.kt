@@ -1,6 +1,5 @@
 package com.example.wsamat
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.animation.OvershootInterpolator
@@ -37,10 +36,12 @@ class WelcomeActivity : BaseActivity() {
         ViewAnimationUtils.applyTouchScaleAnimation(btnGetStarted)
 
         btnGetStarted.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            ViewAnimationUtils.applyActivityTransition(this)
-            finish()
+            val targetClass = if (userPrefs.isLoggedIn) {
+                MainActivity::class.java
+            } else {
+                AuthActivity::class.java
+            }
+            navigateTo(targetClass, finishCurrent = true)
         }
 
         runEntranceAnimations()
