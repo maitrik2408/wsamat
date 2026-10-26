@@ -37,10 +37,6 @@
             android:name=".WelcomeActivity"
             android:exported="true"
             android:theme="@style/Theme.Wsamat">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!-- Local Authentication Activity (Login / Register) -->
@@ -59,12 +55,17 @@
         <!-- Launcher Alias 1: Default WSAMat Safety -->
         <activity-alias
             android:name=".MainActivityDefault"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
-            android:targetActivity=".WelcomeActivity" />
+            android:targetActivity=".WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
 
         <!-- Launcher Alias 2: Calculator Disguise -->
         <activity-alias
@@ -73,7 +74,7 @@
             android:exported="true"
             android:icon="@drawable/ic_alias_calculator"
             android:label="Calculator"
-            android:targetActivity=".MainActivity">
+            android:targetActivity=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -87,7 +88,7 @@
             android:exported="true"
             android:icon="@drawable/ic_alias_compass"
             android:label="Compass"
-            android:targetActivity=".MainActivity">
+            android:targetActivity=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -101,7 +102,7 @@
             android:exported="true"
             android:icon="@drawable/ic_alias_clock"
             android:label="Clock"
-            android:targetActivity=".MainActivity">
+            android:targetActivity=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
