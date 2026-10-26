@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvIncidentType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Emergency SOS"
+                android:textColor="#C2185B"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvIncidentStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#198754"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp"
+                android:text="DISPATCHED"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvIncidentTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="12 Oct 2024, 08:30 PM"
+            android:textColor="#6C757D"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvIncidentLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Location: Lat: 28.6139, Lng: 77.2090"
+            android:textColor="#212529"
+            android:textSize="14sp" />
+
+        <!-- Captured Photo Thumbnail -->
+        <ImageView
+            android:id="@+id/ivCapturedPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="10dp"
+            android:background="#E0E0E0"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <!-- Media Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewMap"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:text="Maps ↗"
+                android:textColor="#C2185B"
+                android:textSize="12sp"
+                app:cornerRadius="8dp"
+                app:strokeColor="#C2185B" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPlayAudio"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1"
+                android:text="▶ Audio"
+                android:textColor="#0D6EFD"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:cornerRadius="8dp"
+                app:strokeColor="#0D6EFD" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShareWhatsApp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:backgroundTint="#25D366"
+                android:text="WhatsApp"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:cornerRadius="8dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
