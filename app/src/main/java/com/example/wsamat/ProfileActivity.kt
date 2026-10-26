@@ -154,8 +154,7 @@ class ProfileActivity : BaseActivity() {
             etPhone.setText(userPrefs.userPhone)
             etEmergencyNote.setText(userPrefs.emergencyNote)
 
-            val savedIconMode = AppIconManager.getSavedIconMode(this)
-            when (savedIconMode) {
+            when (AppIconManager.getSavedIconMode(this)) {
                 AppIconManager.IconMode.CALCULATOR -> rbIconCalculator.isChecked = true
                 AppIconManager.IconMode.COMPASS -> rbIconCompass.isChecked = true
                 AppIconManager.IconMode.CLOCK -> rbIconClock.isChecked = true
@@ -305,7 +304,7 @@ class ProfileActivity : BaseActivity() {
             }
             startActivity(intent)
             Toast.makeText(this, "Please allow permissions in App Permissions settings.", Toast.LENGTH_LONG).show()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Toast.makeText(this, "Unable to open app settings automatically.", Toast.LENGTH_SHORT).show()
         }
     }
@@ -347,13 +346,9 @@ class ProfileActivity : BaseActivity() {
         tvCallStatus.text = if (hasCall) "Status: Granted ✓" else "Status: Denied ✗"
         btnGrantCall.isEnabled = !hasCall
 
-        val hasNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ContextCompat.checkSelfPermission(
-                this, Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        } else {
-            true
-        }
+        val hasNotification = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+
         tvNotificationStatus.text = if (hasNotification) "Status: Granted ✓" else "Status: Denied ✗"
         btnGrantNotification.isEnabled = !hasNotification
     }
