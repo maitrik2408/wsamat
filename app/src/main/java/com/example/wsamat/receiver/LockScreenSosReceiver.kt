@@ -27,7 +27,7 @@ class LockScreenSosReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val now = System.currentTimeMillis()
-        if (now - lastTriggerTime < 10000L) {
+        if ((now - lastTriggerTime) < 10000L) {
             return
         }
         lastTriggerTime = now
@@ -62,7 +62,7 @@ class LockScreenSosReceiver : BroadcastReceiver() {
                     val mapUrl = loc?.mapUrl ?: ""
                     val customNote = userPrefs.emergencyNote
 
-                    val isSent = smsHelper.sendEmergencySms(contacts, customNote, mapUrl)
+                    val isSent = smsHelper.sendEmergencySms(contacts, customNote, mapUrl, photoPath != null, audioPath != null)
                     var statusStr = if (isSent) "Direct SMS Sent to ${contacts.size} Contacts" else "SMS Dispatched"
                     if (callPlaced) {
                         statusStr += " | 112 Call Placed"
@@ -109,10 +109,10 @@ class LockScreenSosReceiver : BroadcastReceiver() {
             }
             context.startActivity(callIntent)
             true
-        } catch (e: SecurityException) {
+        } catch (_: SecurityException) {
             Toast.makeText(context, "SecurityException: CALL_PHONE permission denied.", Toast.LENGTH_SHORT).show()
             false
-        } catch (e: ActivityNotFoundException) {
+        } catch (_: ActivityNotFoundException) {
             Toast.makeText(context, "ActivityNotFoundException: No dialer app available to place 112 call.", Toast.LENGTH_SHORT).show()
             false
         } catch (e: Exception) {

@@ -1,7 +1,6 @@
 package com.example.wsamat
 
 import android.app.KeyguardManager
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -66,7 +65,7 @@ class LockScreenSosOverlayActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
-            val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as? KeyguardManager
+            val keyguardManager = getSystemService(KEYGUARD_SERVICE) as? KeyguardManager
             keyguardManager?.requestDismissKeyguard(this, null)
         } else {
             @Suppress("DEPRECATION")
@@ -94,11 +93,11 @@ class LockScreenSosOverlayActivity : AppCompatActivity() {
                 val mapUrl = loc?.mapUrl ?: ""
                 val customNote = userPrefs.emergencyNote
 
-                val isSent = smsHelper.sendEmergencySms(contacts, customNote, mapUrl)
+                val isSent = smsHelper.sendEmergencySms(contacts, customNote, mapUrl, photoPath != null, audioPath != null)
                 val statusStr = if (isSent) "Direct SMS Sent to ${contacts.size} Contacts" else "SMS Dispatched"
 
                 // Dispatch to WhatsApp as well with image and location
-                whatsAppHelper.sendEmergencyWhatsApp(contacts, customNote, mapUrl, photoPath)
+                whatsAppHelper.sendEmergencyWhatsApp(contacts, customNote, mapUrl, photoPath, audioPath)
 
                 val resultMsg = buildString {
                     append("🚨 SOS DISPATCHED DIRECTLY!")
