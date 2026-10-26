@@ -14,6 +14,7 @@ import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.example.wsamat.MainActivity
 import com.example.wsamat.R
+import com.example.wsamat.config.AppConfig
 import com.example.wsamat.data.UserPreferences
 
 class SafetyCheckInService : Service() {
@@ -97,7 +98,9 @@ class SafetyCheckInService : Service() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setOnlyAlertOnce(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
     }
 
@@ -111,9 +114,11 @@ class SafetyCheckInService : Service() {
         val channel = NotificationChannel(
             CHANNEL_ID,
             "Safety Check-in Timer",
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "Monitors safety check-in timer."
+            description = "Monitors safety check-in timer without repeated alert pop-ups."
+            setSound(null, null)
+            enableVibration(false)
         }
         val manager = getSystemService(NotificationManager::class.java)
         manager?.createNotificationChannel(channel)
@@ -127,8 +132,8 @@ class SafetyCheckInService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     companion object {
-        const val CHANNEL_ID = "wsamat_checkin_channel"
-        const val NOTIFICATION_ID = 1002
+        const val CHANNEL_ID = AppConfig.SAFETY_CHECKIN_CHANNEL_ID
+        const val NOTIFICATION_ID = AppConfig.SAFETY_CHECKIN_NOTIFICATION_ID
 
         fun startService(context: Context) {
             val intent = Intent(context, SafetyCheckInService::class.java)

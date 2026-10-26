@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="indigo_primary">#1A237E</color>
+    <color name="indigo_light">#3F51B5</color>
+    <color name="rose_accent">#C2185B</color>
+    <color name="rose_light">#F8BBD0</color>
+    <color name="cyan_accent">#00BCD4</color>
+    <color name="background_light">#F8F9FA</color>
+    <color name="background_dark">#12002B</color>
 </resources>

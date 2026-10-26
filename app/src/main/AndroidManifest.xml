@@ -32,6 +32,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Wsamat">
 
+        <!-- Welcome Screen Activity (Primary App Launcher) -->
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Wsamat">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <!-- Main Dashboard Activity -->
         <activity
             android:name=".MainActivity"
@@ -41,17 +52,12 @@
         <!-- Launcher Alias 1: Default WSAMat Safety -->
         <activity-alias
             android:name=".MainActivityDefault"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
-            android:targetActivity=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-alias>
+            android:targetActivity=".WelcomeActivity" />
 
         <!-- Launcher Alias 2: Calculator Disguise -->
         <activity-alias
@@ -94,6 +100,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
+
+        <!-- Privacy Policy Screen -->
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.Wsamat" />
 
         <!-- Emergency SOS Countdown -->
         <activity

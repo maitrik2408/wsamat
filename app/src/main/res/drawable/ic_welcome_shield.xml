@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Cyan Circuit Shield (Right Side) -->
+    <path
+        android:fillColor="#00BCD4"
+        android:pathData="M100,20 C145,20 180,35 180,85 C180,140 135,175 100,190 C65,175 20,140 20,85 C20,35 55,20 100,20 Z" />
+
+    <path
+        android:fillColor="#00838F"
+        android:pathData="M100,28 C138,28 170,40 170,85 C170,132 130,163 100,178 C70,163 30,132 30,85 C30,40 62,28 100,28 Z" />
+
+    <!-- Circuit Trace Lines and Nodes on Shield -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M125,50 A4,4 0 1,1 125,58 A4,4 0 1,1 125,50 M150,65 A4,4 0 1,1 150,73 A4,4 0 1,1 150,65 M160,100 A4,4 0 1,1 160,108 A4,4 0 1,1 160,100 M135,120 A4,4 0 1,1 135,128 A4,4 0 1,1 135,120 M155,135 A4,4 0 1,1 155,143 A4,4 0 1,1 155,135" />
+
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M125,54 L140,54 L140,75 L150,75 M150,69 L150,95 L160,95 M135,124 L145,124 L145,139 L155,139" />
+
+    <!-- Padlock Symbol inside Cyan Shield -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M118,135 L132,135 C134,135 135,136 135,138 L135,152 C135,154 134,155 132,155 L118,155 C116,155 115,154 115,152 L115,138 C115,136 116,135 118,135 Z" />
+
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000"
+        android:pathData="M120,135 L120,128 C120,124 122,122 125,122 C128,122 130,124 130,128 L130,135" />
+
+    <path
+        android:fillColor="#00838F"
+        android:pathData="M125,142 A2,2 0 1,1 125,146 A2,2 0 1,1 125,142 M124.2,145 L125.8,145 L126,149 L124,149 Z" />
+
+    <!-- Woman Silhouette with Flowing Purple Hair (Left Side) -->
+    <path
+        android:fillColor="#6A1B9A"
+        android:pathData="M100,20 C85,20 60,30 45,50 C25,75 15,100 25,125 C30,138 42,150 55,160 C70,172 85,182 100,190 C85,170 70,150 70,128 C70,110 82,92 98,82 C108,76 112,65 106,55 C100,45 108,30 100,20 Z" />
+
+    <path
+        android:fillColor="#4A148C"
+        android:pathData="M90,18 C70,25 45,40 32,65 C18,92 12,118 20,140 C10,125 10,100 22,75 C35,48 60,28 90,18 Z" />
+
+    <!-- Face Profile Line (White Silhouette) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M95,65 C92,72 90,80 94,86 C98,92 105,94 108,100 C110,105 104,110 100,113 C95,117 92,122 90,128 C88,135 88,142 90,150 C80,140 78,125 78,110 C78,92 88,78 95,65 Z" />
+
+    <!-- Eyelash / Eye Detail -->
+    <path
+        android:strokeColor="#4A148C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M93,82 Q97,85 100,83" />
+
+</vector>

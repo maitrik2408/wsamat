@@ -13,20 +13,20 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.wsamat.data.UserPreferences
 import com.example.wsamat.service.LockScreenSosService
+import com.example.wsamat.ui.anim.ViewAnimationUtils
+import com.example.wsamat.ui.base.BaseActivity
 import com.example.wsamat.utils.AppIconManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : BaseActivity() {
 
-    private lateinit var userPrefs: UserPreferences
     private lateinit var etName: TextInputEditText
     private lateinit var etPhone: TextInputEditText
     private lateinit var etEmergencyNote: TextInputEditText
@@ -54,6 +54,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var tvCameraStatus: TextView
     private lateinit var tvAudioStatus: TextView
     private lateinit var tvContactsStatus: TextView
+    private lateinit var tvCallStatus: TextView
     private lateinit var tvNotificationStatus: TextView
 
     private lateinit var btnGrantLocation: Button
@@ -61,6 +62,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var btnGrantCamera: Button
     private lateinit var btnGrantAudio: Button
     private lateinit var btnGrantContacts: Button
+    private lateinit var btnGrantCall: Button
     private lateinit var btnGrantNotification: Button
 
     private var isBindingData = false
@@ -85,6 +87,10 @@ class ProfileActivity : AppCompatActivity() {
         ActivityResultContracts.RequestPermission()
     ) { updatePermissionStatuses() }
 
+    private val requestCallPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { updatePermissionStatuses() }
+
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { updatePermissionStatuses() }
@@ -94,8 +100,6 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "User Profile & Setup"
-
-        userPrefs = UserPreferences(this)
 
         etName = findViewById(R.id.etName)
         etPhone = findViewById(R.id.etPhone)
@@ -124,6 +128,7 @@ class ProfileActivity : AppCompatActivity() {
         tvCameraStatus = findViewById(R.id.tvCameraStatus)
         tvAudioStatus = findViewById(R.id.tvAudioStatus)
         tvContactsStatus = findViewById(R.id.tvContactsStatus)
+        tvCallStatus = findViewById(R.id.tvCallStatus)
         tvNotificationStatus = findViewById(R.id.tvNotificationStatus)
 
         btnGrantLocation = findViewById(R.id.btnGrantLocation)
@@ -131,6 +136,7 @@ class ProfileActivity : AppCompatActivity() {
         btnGrantCamera = findViewById(R.id.btnGrantCamera)
         btnGrantAudio = findViewById(R.id.btnGrantAudio)
         btnGrantContacts = findViewById(R.id.btnGrantContacts)
+        btnGrantCall = findViewById(R.id.btnGrantCall)
         btnGrantNotification = findViewById(R.id.btnGrantNotification)
 
         setupListeners()
@@ -176,6 +182,12 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        val btnPrivacy = findViewById<MaterialButton>(R.id.btnPrivacyPolicy)
+        ViewAnimationUtils.applyTouchScaleAnimation(btnPrivacy)
+        btnPrivacy.setOnClickListener {
+            navigateTo(PrivacyPolicyActivity::class.java)
+        }
+
         rgAppIconDisguise.setOnCheckedChangeListener { _, checkedId ->
             if (isBindingData) return@setOnCheckedChangeListener
             val targetMode = when (checkedId) {
@@ -266,6 +278,10 @@ class ProfileActivity : AppCompatActivity() {
             requestContactsPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
         }
 
+        btnGrantCall.setOnClickListener {
+            requestCallPermissionLauncher.launch(Manifest.permission.CALL_PHONE)
+        }
+
         btnGrantNotification.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
@@ -281,7 +297,7 @@ class ProfileActivity : AppCompatActivity() {
                 data = Uri.fromParts("package", packageName, null)
             }
             startActivity(intent)
-            Toast.makeText(this, "Please allow SMS/Camera permissions in App Permissions settings.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please allow permissions in App Permissions settings.", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             Toast.makeText(this, "Unable to open app settings automatically.", Toast.LENGTH_SHORT).show()
         }
@@ -317,6 +333,12 @@ class ProfileActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
         tvContactsStatus.text = if (hasContacts) "Status: Granted ✓" else "Status: Denied ✗"
         btnGrantContacts.isEnabled = !hasContacts
+
+        val hasCall = ContextCompat.checkSelfPermission(
+            this, Manifest.permission.CALL_PHONE
+        ) == PackageManager.PERMISSION_GRANTED
+        tvCallStatus.text = if (hasCall) "Status: Granted ✓" else "Status: Denied ✗"
+        btnGrantCall.isEnabled = !hasCall
 
         val hasNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ContextCompat.checkSelfPermission(

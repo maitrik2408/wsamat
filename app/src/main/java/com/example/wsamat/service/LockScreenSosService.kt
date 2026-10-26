@@ -11,8 +11,10 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.example.wsamat.LockScreenSosOverlayActivity
 import com.example.wsamat.R
+import com.example.wsamat.config.AppConfig
 import com.example.wsamat.data.UserPreferences
 
 class LockScreenSosService : Service() {
@@ -50,6 +52,7 @@ class LockScreenSosService : Service() {
 
     private fun buildNotification(): Notification {
         val overlayIntent = Intent(this, LockScreenSosOverlayActivity::class.java).apply {
+            action = Intent.ACTION_VIEW
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
@@ -57,32 +60,53 @@ class LockScreenSosService : Service() {
             this,
             102,
             overlayIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
 
         val buttonText = userPrefs.lockScreenButtonText.ifEmpty { "🚨 SPECIAL LOCK SCREEN SOS" }
 
-        return NotificationCompat.Builder(this, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("WSAMat Lock Screen Special SOS Active")
             .setContentText("Tap to open special Emergency SOS button on lock screen.")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(overlayPendingIntent)
             .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setOnlyAlertOnce(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .addAction(R.drawable.ic_sos, buttonText, overlayPendingIntent)
-            .build()
+
+        // Best-effort Android Notification Bubble Metadata
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                val bubbleData = NotificationCompat.BubbleMetadata.Builder(
+                    overlayPendingIntent,
+                    IconCompat.createWithResource(this, R.mipmap.ic_launcher)
+                )
+                    .setDesiredHeight(600)
+                    .setAutoExpandBubble(false)
+                    .setSuppressNotification(false)
+                    .build()
+                builder.setBubbleMetadata(bubbleData)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        return builder.build()
     }
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Lock Screen SOS Button",
-            NotificationManager.IMPORTANCE_HIGH
+            "Lock Screen SOS Protection",
+            NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "Maintains instant special SOS button on device lock screen"
+            description = "Maintains quiet instant special SOS overlay and bubble on lock screen"
             lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            setSound(null, null)
+            enableVibration(false)
         }
         val manager = getSystemService(NotificationManager::class.java)
         manager?.createNotificationChannel(channel)
@@ -91,8 +115,8 @@ class LockScreenSosService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     companion object {
-        const val CHANNEL_ID = "wsamat_lockscreen_sos_channel"
-        const val NOTIFICATION_ID = 1003
+        const val CHANNEL_ID = AppConfig.LOCK_SCREEN_SOS_CHANNEL_ID
+        const val NOTIFICATION_ID = AppConfig.LOCK_SCREEN_SOS_NOTIFICATION_ID
 
         fun startService(context: Context) {
             val userPrefs = UserPreferences(context)

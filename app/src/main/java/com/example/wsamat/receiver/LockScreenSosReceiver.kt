@@ -1,14 +1,20 @@
 package com.example.wsamat.receiver
 
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.example.wsamat.R
 import com.example.wsamat.SosCountdownActivity
+import com.example.wsamat.config.AppConfig
 import com.example.wsamat.data.DatabaseHelper
 import com.example.wsamat.data.Incident
 import com.example.wsamat.data.UserPreferences
@@ -32,7 +38,7 @@ class LockScreenSosReceiver : BroadcastReceiver() {
         if (mode == "COUNTDOWN") {
             val sosIntent = Intent(context, SosCountdownActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                putExtra("TRIGGER_SOURCE", "Lock Screen Button")
+                putExtra(AppConfig.EXTRA_TRIGGER_SOURCE, "Lock Screen Button")
             }
             context.startActivity(sosIntent)
         } else {
@@ -45,8 +51,10 @@ class LockScreenSosReceiver : BroadcastReceiver() {
             val audioRecorderHelper = AudioRecorderHelper(context)
 
             val contacts = dbHelper.getAllContacts()
-
             val audioPath = audioRecorderHelper.startRecording(20)
+
+            // Attempt automated 112 emergency call if CALL_PHONE permission is granted
+            val callPlaced = attemptEmergencyCall(context)
 
             cameraHelper.captureSilentPhoto { photoPath ->
                 locationHelper.fetchCurrentLocation { loc ->
@@ -55,7 +63,10 @@ class LockScreenSosReceiver : BroadcastReceiver() {
                     val customNote = userPrefs.emergencyNote
 
                     val isSent = smsHelper.sendEmergencySms(contacts, customNote, mapUrl)
-                    val statusStr = if (isSent) "Direct SMS Sent to ${contacts.size} Contacts" else "SMS Dispatched"
+                    var statusStr = if (isSent) "Direct SMS Sent to ${contacts.size} Contacts" else "SMS Dispatched"
+                    if (callPlaced) {
+                        statusStr += " | 112 Call Placed"
+                    }
 
                     dbHelper.addIncident(
                         Incident(
@@ -72,6 +83,41 @@ class LockScreenSosReceiver : BroadcastReceiver() {
                     showResultNotification(context, statusStr, mapUrl, photoPath != null, audioPath != null)
                 }
             }
+        }
+    }
+
+    private fun attemptEmergencyCall(context: Context): Boolean {
+        val hasTelephony = context.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
+        if (!hasTelephony) {
+            Toast.makeText(context, "Automated calling unavailable: Device lacks telephony feature.", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        val hasCallPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CALL_PHONE
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if (!hasCallPermission) {
+            Toast.makeText(context, "Automatic 112 call skipped: CALL_PHONE permission not granted.", Toast.LENGTH_LONG).show()
+            return false
+        }
+
+        return try {
+            val callIntent = Intent(Intent.ACTION_CALL, Uri.parse("tel:${AppConfig.HOTLINE_NATIONAL_EMERGENCY}")).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(callIntent)
+            true
+        } catch (e: SecurityException) {
+            Toast.makeText(context, "SecurityException: CALL_PHONE permission denied.", Toast.LENGTH_SHORT).show()
+            false
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(context, "ActivityNotFoundException: No dialer app available to place 112 call.", Toast.LENGTH_SHORT).show()
+            false
+        } catch (e: Exception) {
+            Toast.makeText(context, "Failed to place automatic call: ${e.message}", Toast.LENGTH_SHORT).show()
+            false
         }
     }
 
@@ -106,7 +152,7 @@ class LockScreenSosReceiver : BroadcastReceiver() {
             .setContentTitle("🚨 Emergency SOS Dispatched")
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setAutoCancel(true)
@@ -116,7 +162,7 @@ class LockScreenSosReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        const val ACTION_TRIGGER_LOCK_SOS = "com.example.wsamat.ACTION_TRIGGER_LOCK_SOS"
+        const val ACTION_TRIGGER_LOCK_SOS = AppConfig.ACTION_TRIGGER_LOCK_SOS
         private var lastTriggerTime = 0L
     }
 }

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privacy Policy"
+            android:textColor="#1A237E"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="WSAMat Personal Safety Hub Transparency &amp; Data Disclosure"
+            android:textColor="#6C757D"
+            android:textSize="13sp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. Application Purpose"
+                    android:textColor="#1A237E"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="WSAMat Personal Safety Hub is a personal security assistance tool designed to help users dispatch emergency notifications, record covert incident evidence, and facilitate rapid emergency access during personal safety threats."
+                    android:textColor="#212529"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="2. Required Permissions &amp; Access"
+                    android:textColor="#1A237E"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="WSAMat requests access to specific device hardware features and permissions strictly to operate safety features:\n• Location (ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION): Retrieves GPS coordinates to attach live Google Maps navigation links to emergency SMS alerts.\n• SMS (SEND_SMS): Dispatches direct carrier emergency SMS notifications to your saved trusted contacts upon SOS activation.\n• Camera (CAMERA): Captures silent background JPEG evidence photos during SOS triggers.\n• Microphone (RECORD_AUDIO): Records up to 20 seconds of ambient audio during emergency alerts.\n• Contacts (READ_CONTACTS): Allows picking emergency contacts from your phonebook.\n• Phone Calls (CALL_PHONE): Enables automated emergency dialing to 112 when triggered via lock-screen SOS.\n• Notifications &amp; Foreground Services: Maintains persistent lock-screen SOS overlay and gesture monitoring.\n• Vibration (VIBRATE): Delivers tactile haptic feedback during SOS countdowns."
+                    android:textColor="#212529"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="3. Data Storage &amp; Encryption Disclaimer"
+                    android:textColor="#1A237E"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="• All user details, saved contacts, emergency notes, and incident records are stored locally on your device within an unencrypted SQLite database (wsamat_safety.db) and SharedPreferences.\n• Captured evidence photos are saved in the app-specific 'emergency_photos' directory, and audio clips in the 'emergency_audio' directory.\n• Photos and audio files are NOT placed into public media libraries (Gallery or Music apps).\n• Application-Level Encryption Disclaimer: Current application implementation does NOT provide application-level encryption for database storage, preference files, photos, or audio files. Android system backups may back up this unencrypted data to your Google account. Users should not assume the data is encrypted at rest."
+                    android:textColor="#212529"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="4. Information Sharing &amp; Third Parties"
+                    android:textColor="#1A237E"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="• SMS &amp; GPS Sharing: Outgoing emergency SMS messages contain your custom message and live Google Maps link sent via your carrier network.\n• WhatsApp Sharing: External sharing uses secure FileProvider Content URIs (com.example.wsamat.fileprovider) to pass media safely to WhatsApp or third-party apps selected by the user.\n• Remote Servers: WSAMat does NOT transmit your personal data, location, photos, or audio to any external proprietary server."
+                    android:textColor="#212529"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="5. Lock-Screen, Disguise &amp; Automated Calling"
+                    android:textColor="#1A237E"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="• Lock-Screen SOS &amp; Bubbles: Maintained as quiet ongoing notifications and notification bubbles on your lock screen for immediate access.\n• Disguise Features: Supports Calculator, Compass, and Clock launcher icon aliases and stealth PIN calculator SOS.\n• Automated 112 Dialing: When lock-screen instant SOS is triggered and CALL_PHONE permission is granted, WSAMat attempts an automated emergency call to 112."
+                    android:textColor="#212529"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="6. Data Retention &amp; User Rights"
+                    android:textColor="#1A237E"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="• Data Retention: Information remains stored locally until you delete individual contacts, clear incident history, clear app data via Android Settings, or uninstall the application.\n• Permission Revocation: Revoking permissions in Android Settings will disable related features (e.g. revoking SMS permission disables direct SMS alerts)."
+                    android:textColor="#212529"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="7. Important Safety Disclaimer"
+                    android:textColor="#C2185B"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="• Assistance Tool Only: WSAMat is an emergency assistance tool and is NOT a guaranteed replacement for official law enforcement or emergency dispatch services. Delivery of SMS alerts depends on network carrier availability and device hardware status.\n• Trial Area Notice: Users must conduct feature testing ONLY through the dedicated Trial Area / Safety Sandbox to prevent sending real emergency alerts or dialing actual emergency hotlines."
+                    android:textColor="#212529"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</ScrollView>

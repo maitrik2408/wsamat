@@ -19,6 +19,7 @@ import android.os.Looper
 import androidx.core.app.NotificationCompat
 import com.example.wsamat.MainActivity
 import com.example.wsamat.R
+import com.example.wsamat.config.AppConfig
 import com.example.wsamat.data.UserPreferences
 import com.example.wsamat.utils.ShakeDetector
 
@@ -91,12 +92,10 @@ class ShakeService : Service() {
         val now = System.currentTimeMillis()
         lastShakeTimestamp = now
 
-        // If power button press occurred within last 2.5 seconds
         if (now - lastPowerPressTimestamp < 2500L) {
             cancelPendingShake()
             triggerSos("Shake + Power Button")
         } else {
-            // Schedule an 800ms grace window in case power button is pressed immediately after shaking
             cancelPendingShake()
             val runnable = Runnable {
                 triggerSos("Phone Shake Gesture")
@@ -110,14 +109,12 @@ class ShakeService : Service() {
         val now = System.currentTimeMillis()
         lastPowerPressTimestamp = now
 
-        // Check if phone was shaken within last 2.5 seconds or during active pending shake
         if (now - lastShakeTimestamp < 2500L || pendingShakeRunnable != null) {
             cancelPendingShake()
             triggerSos("Shake + Power Button")
             return
         }
 
-        // Track power button press window for 3x rapid press
         powerPressTimestamps.add(now)
         powerPressTimestamps.removeAll { now - it > 2000L }
 
@@ -137,7 +134,7 @@ class ShakeService : Service() {
 
     private fun triggerSos(source: String) {
         val now = System.currentTimeMillis()
-        if (now - lastSosTriggerTime < 8000L) return // 8s debounce guard
+        if (now - lastSosTriggerTime < 8000L) return
         lastSosTriggerTime = now
 
         val sosIntent = Intent().setClassName(this, "com.example.wsamat.SosCountdownActivity").apply {
@@ -176,23 +173,33 @@ class ShakeService : Service() {
             PendingIntent.FLAG_IMMUTABLE
         )
 
+        val now = System.currentTimeMillis()
+        val shouldAlert = now - userPrefs.lastBackgroundNotificationAlertTimeMillis > AppConfig.NOTIFICATION_ALERT_THROTTLE_INTERVAL_MS
+        if (shouldAlert) {
+            userPrefs.lastBackgroundNotificationAlertTimeMillis = now
+        }
+
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("WSAMat Protection Active")
             .setContentText("Shake + Power Button detection active for emergency SOS.")
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
+            .setOnlyAlertOnce(!shouldAlert)
             .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
     }
 
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Shake & Power Button Service",
+            "Background Gesture Protection",
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "Keeps shake and power button detection active in background."
+            description = "Maintains quiet background gesture protection"
+            setSound(null, null)
+            enableVibration(false)
         }
         val manager = getSystemService(NotificationManager::class.java)
         manager?.createNotificationChannel(channel)

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
+import com.example.wsamat.R
 
 object ViewAnimationUtils {
 
@@ -38,8 +39,12 @@ object ViewAnimationUtils {
         }
     }
 
-    fun applyActivityTransition(activity: Activity) {
+    fun applyActivityTransition(activity: Activity, isBackward: Boolean = false) {
         @Suppress("DEPRECATION")
-        activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        if (isBackward) {
+            activity.overridePendingTransition(R.anim.slide_in_left_3d, R.anim.slide_out_right_3d)
+        } else {
+            activity.overridePendingTransition(R.anim.slide_in_right_3d, R.anim.slide_out_left_3d)
+        }
     }
 }

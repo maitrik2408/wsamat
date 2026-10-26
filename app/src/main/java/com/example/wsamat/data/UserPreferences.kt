@@ -65,6 +65,10 @@ class UserPreferences(context: Context) {
         get() = prefs.getString(KEY_LOCK_SCREEN_BUTTON_TEXT, "🚨 DIRECT SOS MESSAGE") ?: "🚨 DIRECT SOS MESSAGE"
         set(value) = prefs.edit().putString(KEY_LOCK_SCREEN_BUTTON_TEXT, value).apply()
 
+    var lastBackgroundNotificationAlertTimeMillis: Long
+        get() = prefs.getLong(KEY_LAST_BG_NOTIF_ALERT_TIME, 0L)
+        set(value) = prefs.edit().putLong(KEY_LAST_BG_NOTIF_ALERT_TIME, value).apply()
+
     companion object {
         private const val PREF_NAME = "wsamat_user_prefs"
         private const val KEY_IS_FIRST_RUN = "is_first_run"
@@ -81,5 +85,6 @@ class UserPreferences(context: Context) {
         private const val KEY_LOCK_SCREEN_SOS_ENABLED = "lock_screen_sos_enabled"
         private const val KEY_LOCK_SCREEN_SOS_MODE = "lock_screen_sos_mode"
         private const val KEY_LOCK_SCREEN_BUTTON_TEXT = "lock_screen_button_text"
+        private const val KEY_LAST_BG_NOTIF_ALERT_TIME = "last_bg_notif_alert_time"
     }
 }
