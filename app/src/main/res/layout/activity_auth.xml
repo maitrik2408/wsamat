@@ -27,7 +27,7 @@
             android:layout_marginTop="12dp"
             android:text="WSAMat Safety Hub"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="26sp"
             android:textStyle="bold" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_marginTop="4dp"
             android:text="Secure Local Device Authentication"
             android:textColor="#00BCD4"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <!-- Main Authentication Card -->
@@ -47,7 +47,9 @@
             android:layout_marginTop="24dp"
             app:cardBackgroundColor="#20FFFFFF"
             app:cardCornerRadius="20dp"
-            app:cardElevation="2dp">
+            app:cardElevation="4dp"
+            app:strokeColor="#40FFFFFF"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,23 +61,23 @@
                 <RadioGroup
                     android:id="@+id/rgAuthMode"
                     android:layout_width="match_parent"
-                    android:layout_height="46dp"
+                    android:layout_height="48dp"
                     android:background="#30FFFFFF"
                     android:orientation="horizontal"
-                    android:padding="3dp">
+                    android:padding="4dp">
 
                     <RadioButton
                         android:id="@+id/rbModeLogin"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/ic_launcher_background"
+                        android:background="@drawable/bg_tab_active_login"
                         android:button="@null"
                         android:checked="true"
                         android:gravity="center"
                         android:text="LOGIN"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
+                        android:textColor="#000000"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <RadioButton
@@ -86,8 +88,8 @@
                         android:button="@null"
                         android:gravity="center"
                         android:text="REGISTER"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp"
+                        android:textColor="#B0BEC5"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
                 </RadioGroup>
 
@@ -96,7 +98,7 @@
                     android:id="@+id/layoutLoginForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="18dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -104,6 +106,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Email / Username"
+                        android:textColorHint="#B0BEC5"
                         app:hintTextColor="#00BCD4"
                         app:strokeColor="#00BCD4">
 
@@ -112,15 +115,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:hint="Password"
+                        android:textColorHint="#B0BEC5"
                         app:hintTextColor="#00BCD4"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="#00BCD4"
@@ -131,20 +136,22 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPassword"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnLoginSubmit"
                         android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="22dp"
                         android:backgroundTint="#00BCD4"
+                        android:elevation="4dp"
                         android:text="LOGIN TO SAFETY HUB"
                         android:textColor="#000000"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
-                        app:cornerRadius="27dp" />
+                        app:cornerRadius="28dp" />
 
                 </LinearLayout>
 
@@ -153,7 +160,7 @@
                     android:id="@+id/layoutRegisterForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="18dp"
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -162,6 +169,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Full Name"
+                        android:textColorHint="#B0BEC5"
                         app:hintTextColor="#00BCD4"
                         app:strokeColor="#00BCD4">
 
@@ -170,15 +178,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:hint="Phone Number"
+                        android:textColorHint="#B0BEC5"
                         app:hintTextColor="#00BCD4"
                         app:strokeColor="#00BCD4">
 
@@ -187,15 +197,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="phone"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:hint="Email Address"
+                        android:textColorHint="#B0BEC5"
                         app:hintTextColor="#00BCD4"
                         app:strokeColor="#00BCD4">
 
@@ -204,15 +216,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="14dp"
                         android:hint="Password"
+                        android:textColorHint="#B0BEC5"
                         app:hintTextColor="#00BCD4"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="#00BCD4"
@@ -223,20 +237,22 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPassword"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRegisterSubmit"
                         android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="22dp"
                         android:backgroundTint="#FF4081"
+                        android:elevation="4dp"
                         android:text="CREATE LOCAL ACCOUNT"
                         android:textColor="#FFFFFF"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
-                        app:cornerRadius="27dp" />
+                        app:cornerRadius="28dp" />
 
                 </LinearLayout>
 
@@ -249,20 +265,20 @@
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="18dp"
             android:text="Don't have an account? Register Now"
             android:textColor="#00BCD4"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="14dp"
             android:text="🔒 Credentials &amp; Profile Data Saved Safely on Your Local Device"
             android:textAlignment="center"
-            android:textColor="#80FFFFFF"
-            android:textSize="11sp" />
+            android:textColor="#B0BEC5"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </ScrollView>

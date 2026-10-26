@@ -1,5 +1,6 @@
 package com.example.wsamat
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -100,12 +101,24 @@ class AuthActivity : BaseActivity() {
         isRegisterMode = isRegister
         if (isRegister) {
             rbModeRegister.isChecked = true
+            rbModeRegister.setBackgroundResource(R.drawable.bg_tab_active_register)
+            rbModeRegister.setTextColor(Color.WHITE)
+
+            rbModeLogin.setBackgroundColor(Color.TRANSPARENT)
+            rbModeLogin.setTextColor(Color.parseColor("#B0BEC5"))
+
             layoutLoginForm.visibility = View.GONE
             layoutRegisterForm.visibility = View.VISIBLE
             btnToggleAuthMode.text = "Already have an account? Login Now"
             tvAuthSubtitle.text = "Create Local Account on Your Device"
         } else {
             rbModeLogin.isChecked = true
+            rbModeLogin.setBackgroundResource(R.drawable.bg_tab_active_login)
+            rbModeLogin.setTextColor(Color.BLACK)
+
+            rbModeRegister.setBackgroundColor(Color.TRANSPARENT)
+            rbModeRegister.setTextColor(Color.parseColor("#B0BEC5"))
+
             layoutRegisterForm.visibility = View.GONE
             layoutLoginForm.visibility = View.VISIBLE
             btnToggleAuthMode.text = "Don't have an account? Register Now"
