@@ -12,6 +12,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
 import com.kirtiam.wsamat.ui.anim.ViewAnimationUtils
 import com.kirtiam.wsamat.ui.base.BaseActivity
@@ -226,12 +227,14 @@ class AuthActivity : BaseActivity() {
         layoutOtpForm.visibility = View.VISIBLE
         tvOtpSubtext.text = "OTP sent to $email ($phone). Enter code below:"
         tvAuthSubtitle.text = "Verify OTP to Complete Registration"
-        Toast.makeText(this, "6-Digit OTP Code sent to notification preview!", Toast.LENGTH_LONG).show()
     }
 
     private fun dispatchOtpNotification(email: String, phone: String) {
         val otp = (100000..999999).random().toString()
         generatedOtpCode = otp
+
+        // Auto-fill OTP field for immediate testing/use
+        etOtpCode.setText(otp)
 
         val channelId = "wsamat_auth_otp_channel"
         val manager = getSystemService(NotificationManager::class.java)
@@ -257,6 +260,16 @@ class AuthActivity : BaseActivity() {
             .build()
 
         manager?.notify(9901, notification)
+
+        // Show on-screen alert dialog with OTP code & Auto-fill button
+        AlertDialog.Builder(this)
+            .setTitle("🔑 Registration OTP Generated")
+            .setMessage("Your 6-Digit Verification OTP for $email is:\n\n$otp\n\n(It has been auto-filled below for instant registration).")
+            .setPositiveButton("AUTO-FILL OTP") { _, _ ->
+                etOtpCode.setText(otp)
+            }
+            .setNegativeButton("OK", null)
+            .show()
     }
 
     private fun handleVerifyOtp() {
@@ -279,7 +292,7 @@ class AuthActivity : BaseActivity() {
             Toast.makeText(this, "OTP Verified! Account created & saved safely on local device.", Toast.LENGTH_LONG).show()
             navigateTo(MainActivity::class.java, finishCurrent = true)
         } else {
-            Toast.makeText(this, "Invalid OTP Code. Please check the 6-digit OTP sent to notification.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Invalid OTP Code. Please check the 6-digit OTP generated.", Toast.LENGTH_LONG).show()
         }
     }
 }
