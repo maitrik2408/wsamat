@@ -1,7 +1,10 @@
 package com.kirtiam.wsamat
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -9,6 +12,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
 import com.kirtiam.wsamat.ui.anim.ViewAnimationUtils
 import com.kirtiam.wsamat.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
@@ -32,10 +36,21 @@ class AuthActivity : BaseActivity() {
     private lateinit var etRegisterPassword: TextInputEditText
     private lateinit var btnRegisterSubmit: Button
 
+    private lateinit var layoutOtpForm: LinearLayout
+    private lateinit var tvOtpSubtext: TextView
+    private lateinit var etOtpCode: TextInputEditText
+    private lateinit var btnVerifyOtpSubmit: Button
+    private lateinit var btnResendOtp: MaterialButton
+
     private lateinit var btnToggleAuthMode: MaterialButton
     private lateinit var tvAuthSubtitle: TextView
 
     private var isRegisterMode = false
+    private var generatedOtpCode: String = ""
+    private var pendingName = ""
+    private var pendingPhone = ""
+    private var pendingEmail = ""
+    private var pendingPassword = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +72,18 @@ class AuthActivity : BaseActivity() {
         etRegisterPassword = findViewById(R.id.etRegisterPassword)
         btnRegisterSubmit = findViewById(R.id.btnRegisterSubmit)
 
+        layoutOtpForm = findViewById(R.id.layoutOtpForm)
+        tvOtpSubtext = findViewById(R.id.tvOtpSubtext)
+        etOtpCode = findViewById(R.id.etOtpCode)
+        btnVerifyOtpSubmit = findViewById(R.id.btnVerifyOtpSubmit)
+        btnResendOtp = findViewById(R.id.btnResendOtp)
+
         btnToggleAuthMode = findViewById(R.id.btnToggleAuthMode)
         tvAuthSubtitle = findViewById(R.id.tvAuthSubtitle)
 
         ViewAnimationUtils.applyTouchScaleAnimation(btnLoginSubmit)
         ViewAnimationUtils.applyTouchScaleAnimation(btnRegisterSubmit)
+        ViewAnimationUtils.applyTouchScaleAnimation(btnVerifyOtpSubmit)
         ViewAnimationUtils.applyTouchScaleAnimation(btnToggleAuthMode)
 
         // Pre-fill existing credentials if available
@@ -93,12 +115,25 @@ class AuthActivity : BaseActivity() {
         }
 
         btnRegisterSubmit.setOnClickListener {
-            handleRegister()
+            handleSendOtp()
+        }
+
+        btnVerifyOtpSubmit.setOnClickListener {
+            handleVerifyOtp()
+        }
+
+        btnResendOtp.setOnClickListener {
+            if (pendingEmail.isNotEmpty() && pendingPhone.isNotEmpty()) {
+                dispatchOtpNotification(pendingEmail, pendingPhone)
+                Toast.makeText(this, "New OTP code generated & sent!", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     private fun setAuthMode(isRegister: Boolean) {
         isRegisterMode = isRegister
+        layoutOtpForm.visibility = View.GONE
+
         if (isRegister) {
             rbModeRegister.isChecked = true
             rbModeRegister.setBackgroundResource(R.drawable.bg_tab_active_register)
@@ -153,7 +188,7 @@ class AuthActivity : BaseActivity() {
         }
     }
 
-    private fun handleRegister() {
+    private fun handleSendOtp() {
         val name = etRegisterName.text.toString().trim()
         val phone = etRegisterPhone.text.toString().trim()
         val email = etRegisterEmail.text.toString().trim()
@@ -164,20 +199,87 @@ class AuthActivity : BaseActivity() {
             return
         }
 
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Please enter a valid Gmail / Email address.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val cleanPhone = phone.replace(Regex("[^0-9+]"), "")
+        if (cleanPhone.length < 5) {
+            Toast.makeText(this, "Please enter a valid Phone Number.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if (password.length < 4) {
             Toast.makeText(this, "Password must be at least 4 characters.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Save account credentials locally
-        userPrefs.userName = name
-        userPrefs.userPhone = phone
-        userPrefs.userEmail = email
-        userPrefs.userPasswordHash = password
-        userPrefs.isRegistered = true
-        userPrefs.isLoggedIn = true
+        pendingName = name
+        pendingPhone = phone
+        pendingEmail = email
+        pendingPassword = password
 
-        Toast.makeText(this, "Account created successfully on local device!", Toast.LENGTH_SHORT).show()
-        navigateTo(MainActivity::class.java, finishCurrent = true)
+        dispatchOtpNotification(email, phone)
+
+        layoutRegisterForm.visibility = View.GONE
+        layoutOtpForm.visibility = View.VISIBLE
+        tvOtpSubtext.text = "OTP sent to $email ($phone). Enter code below:"
+        tvAuthSubtitle.text = "Verify OTP to Complete Registration"
+        Toast.makeText(this, "6-Digit OTP Code sent to notification preview!", Toast.LENGTH_LONG).show()
+    }
+
+    private fun dispatchOtpNotification(email: String, phone: String) {
+        val otp = (100000..999999).random().toString()
+        generatedOtpCode = otp
+
+        val channelId = "wsamat_auth_otp_channel"
+        val manager = getSystemService(NotificationManager::class.java)
+
+        val channel = NotificationChannel(
+            channelId,
+            "Registration OTP Verification",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "Delivers registration 6-digit OTP verification codes"
+        }
+        manager?.createNotificationChannel(channel)
+
+        val notifText = "🔑 Your WSAMat Verification OTP for $email / $phone is: $otp"
+
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle("WSAMat Registration OTP Code")
+            .setContentText(notifText)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(notifText))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .build()
+
+        manager?.notify(9901, notification)
+    }
+
+    private fun handleVerifyOtp() {
+        val enteredOtp = etOtpCode.text.toString().trim()
+
+        if (enteredOtp.isEmpty()) {
+            Toast.makeText(this, "Please enter the 6-digit OTP code.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (enteredOtp == generatedOtpCode && generatedOtpCode.isNotEmpty()) {
+            // Save account credentials locally on device
+            userPrefs.userName = pendingName
+            userPrefs.userPhone = pendingPhone
+            userPrefs.userEmail = pendingEmail
+            userPrefs.userPasswordHash = pendingPassword
+            userPrefs.isRegistered = true
+            userPrefs.isLoggedIn = true
+
+            Toast.makeText(this, "OTP Verified! Account created & saved safely on local device.", Toast.LENGTH_LONG).show()
+            navigateTo(MainActivity::class.java, finishCurrent = true)
+        } else {
+            Toast.makeText(this, "Invalid OTP Code. Please check the 6-digit OTP sent to notification.", Toast.LENGTH_LONG).show()
+        }
     }
 }
