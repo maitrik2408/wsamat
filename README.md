@@ -79,5 +79,5 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 ## Security & Privacy Considerations
 
 - **Data Privacy:** All personal profile data, emergency contact details, and evidence recordings remain strictly on the local device within SQLite database storage and app-private directory storage.
-- **File Sharing Security:** External file sharing uses Content URIs provided by Android FileProvider (`com.example.wsamat.fileprovider`) to ensure secure sandboxed file access.
+- **File Sharing Security:** External file sharing uses Content URIs provided by Android FileProvider (`com.kirtiam.wsamat.fileprovider`) to ensure secure sandboxed file access.
 - **Permission Control:** Permissions for Location, SMS, Camera, Microphone, and Contacts are requested on demand with fallback user controls.

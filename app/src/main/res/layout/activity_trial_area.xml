@@ -56,7 +56,7 @@
                 android:layout_height="match_parent"
                 android:background="#1E1E1E">
 
-                <com.example.wsamat.views.ThreeDSafetyShieldView
+                <com.kirtiam.wsamat.views.ThreeDSafetyShieldView
                     android:id="@+id/trial3dShieldView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

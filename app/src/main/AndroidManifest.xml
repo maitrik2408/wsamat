@@ -228,7 +228,7 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.example.wsamat.ACTION_TRIGGER_LOCK_SOS" />
+                <action android:name="com.kirtiam.wsamat.ACTION_TRIGGER_LOCK_SOS" />
             </intent-filter>
         </receiver>
 

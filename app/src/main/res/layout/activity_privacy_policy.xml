@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="• SMS &amp; GPS Sharing: Outgoing emergency SMS messages contain your custom message and live Google Maps link sent via your carrier network.\n• WhatsApp Sharing: External sharing uses secure FileProvider Content URIs (com.example.wsamat.fileprovider) to pass media safely to WhatsApp or third-party apps selected by the user.\n• Remote Servers: WSAMat does NOT transmit your personal data, location, photos, or audio to any external proprietary server."
+                    android:text="• SMS &amp; GPS Sharing: Outgoing emergency SMS messages contain your custom message and live Google Maps link sent via your carrier network.\n• WhatsApp Sharing: External sharing uses secure FileProvider Content URIs (com.kirtiam.wsamat.fileprovider) to pass media safely to WhatsApp or third-party apps selected by the user.\n• Remote Servers: WSAMat does NOT transmit your personal data, location, photos, or audio to any external proprietary server."
                     android:textColor="#212529"
                     android:textSize="13sp" />
 

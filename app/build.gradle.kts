@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.wsamat"
+    namespace = "com.kirtiam.wsamat"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.example.wsamat"
+        applicationId = "com.kirtiam.wsamat"
         minSdk = 26
         //noinspection OldTargetApi
         targetSdk = 35
